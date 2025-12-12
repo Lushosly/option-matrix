@@ -198,7 +198,7 @@ with tab2:
 
 # === ANALYST INSIGHT (BOTTOM) ===
 st.markdown("---")
-st.subheader("💡 Smart Analyst Insight")
+st.subheader("💡Analyst Insight")
 
 delta_val = greeks['Delta']
 theta_val = greeks['Theta']
