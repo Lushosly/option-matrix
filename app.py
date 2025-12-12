@@ -11,6 +11,7 @@ st.set_page_config(layout="wide", page_title="Quant-3D: Option Matrix")
 # === CSS ===
 st.markdown("""
 <style>
+    /* Main Background */
     .stApp { background-color: #050b14; }
     
     /* Metric Cards */
@@ -39,7 +40,7 @@ st.markdown("""
     .disclaimer {
         font-size: 0.8rem; color: #a8b2d1; background-color: #161b22; 
         padding: 15px; border-radius: 5px; border-left: 5px solid #ff5f5f; 
-        margin-top: 20px; line-height: 1.4;
+        margin-bottom: 20px; line-height: 1.4;
     }
     
     /* Analyst Insight Box (Green Border) */
@@ -108,22 +109,23 @@ sigma = st.sidebar.slider("Implied Volatility (%)", 1.0, 200.0, default_vol, 0.5
 r = st.sidebar.number_input("Risk-Free Rate (%)", 0.0, 20.0, 4.5, 0.1) / 100
 opt_type = st.sidebar.radio("Option Type", ["Call", "Put"]).lower()
 
-# === LEGAL DISCLAIMER (SIDEBAR) ===
-st.sidebar.markdown("""
-<div class="disclaimer">
-    <strong>⚠️ LEGAL DISCLAIMER</strong><br><br>
-    This tool is for <strong>educational and research purposes only</strong>. 
-    Option prices and Greeks are theoretical estimates based on the Black-Scholes model. 
-    They do not guarantee future market performance. <strong>Trade at your own risk.</strong>
-</div>
-""", unsafe_allow_html=True)
-
 # Calculate
 T = T_days / 365
 price, greeks = black_scholes(S, K, T, r, sigma, opt_type)
 
 # === MAIN UI ===
 st.title("Quant-3D: Option Matrix")
+
+# LEGAL DISCLAIMER (TOP)
+st.markdown("""
+<div class="disclaimer">
+    <strong>⚠️ LEGAL DISCLAIMER</strong><br>
+    This tool is for <strong>educational and research purposes only</strong>. 
+    Option prices and Greeks are theoretical estimates based on the Black-Scholes model. 
+    They do not guarantee future market performance. <strong>Trade at your own risk.</strong>
+</div>
+""", unsafe_allow_html=True)
+
 if ticker:
     st.caption(f"Analyzing: **{ticker.upper()}** | Spot: **${S:.2f}** | IV: **{default_vol:.1f}%**")
 else:
@@ -136,24 +138,6 @@ col2.metric("Delta", f"{greeks['Delta']:.3f}")
 col3.metric("Gamma", f"{greeks['Gamma']:.3f}")
 col4.metric("Vega", f"{greeks['Vega']:.3f}")
 col5.metric("Theta", f"{greeks['Theta']:.3f}")
-
-# === ANALYST INSIGHT (NEW) ===
-with st.expander("💡 Analyst Insight: Risk & Sensitivity", expanded=True):
-    delta_val = greeks['Delta']
-    theta_val = greeks['Theta']
-    
-    # Delta Logic
-    if abs(delta_val) > 0.7: delta_msg = "Deep In-The-Money (High Probability)"
-    elif abs(delta_val) < 0.3: delta_msg = "Out-Of-The-Money (Low Probability)"
-    else: delta_msg = "At-The-Money (Neutral)"
-    
-    st.markdown(f"""
-    <div class="insight-box">
-        <strong>Risk Profile:</strong> {delta_msg}<br>
-        • <strong>Delta Exposure:</strong> For every $1 the stock moves, this option value changes by <strong>${delta_val:.2f}</strong>.<br>
-        • <strong>Time Decay (Theta):</strong> You are losing approximately <strong>${theta_val:.2f}</strong> per day just by holding this position.
-    </div>
-    """, unsafe_allow_html=True)
 
 st.markdown("---")
 
@@ -202,12 +186,22 @@ with tab2:
     * **Frictionless Markets:** No transaction costs or taxes.
     """)
 
-# === FOOTER DISCLAIMER ===
+# === ANALYST INSIGHT (BOTTOM) ===
 st.markdown("---")
-st.markdown("""
-<div class="disclaimer">
-    <strong>⚠️ LEGAL DISCLAIMER</strong><br>
-    This dashboard is for <strong>educational and research purposes only</strong>. 
-    The calculations are theoretical approximations. Do not use this tool for actual trading decisions.
+st.subheader("💡 Smart Analyst Insight")
+
+delta_val = greeks['Delta']
+theta_val = greeks['Theta']
+
+# Delta Logic
+if abs(delta_val) > 0.7: delta_msg = "Deep In-The-Money (High Probability)"
+elif abs(delta_val) < 0.3: delta_msg = "Out-Of-The-Money (Low Probability)"
+else: delta_msg = "At-The-Money (Neutral)"
+
+st.markdown(f"""
+<div class="insight-box">
+    <strong>Risk Profile:</strong> {delta_msg}<br>
+    • <strong>Delta Exposure:</strong> For every $1 the stock moves, this option value changes by <strong>${delta_val:.2f}</strong>.<br>
+    • <strong>Time Decay (Theta):</strong> You are losing approximately <strong>${theta_val:.2f}</strong> per day just by holding this position (assuming all else stays constant).
 </div>
 """, unsafe_allow_html=True)
