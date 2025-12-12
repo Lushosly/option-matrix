@@ -36,14 +36,14 @@ st.markdown("""
     button[data-baseweb="tab"] { color: #8892b0; font-weight: bold; }
     button[data-baseweb="tab"][aria-selected="true"] { color: #00f5d4; border-bottom: 2px solid #00f5d4; }
     
-    /* Disclaimer Box (Red Border) */
+    /* Disclaimer Box */
     .disclaimer {
         font-size: 0.8rem; color: #a8b2d1; background-color: #161b22; 
         padding: 15px; border-radius: 5px; border-left: 5px solid #ff5f5f; 
         margin-bottom: 20px; line-height: 1.4;
     }
     
-    /* Analyst Insight Box (Green Border) */
+    /* Analyst Insight Box */
     .insight-box {
         background-color: #0d1b2a;
         padding: 15px;
