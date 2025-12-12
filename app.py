@@ -113,6 +113,16 @@ opt_type = st.sidebar.radio("Option Type", ["Call", "Put"]).lower()
 T = T_days / 365
 price, greeks = black_scholes(S, K, T, r, sigma, opt_type)
 
+# === LEGAL DISCLAIMER (SIDEBAR) ===
+st.sidebar.markdown("""
+<div class="disclaimer">
+    <strong>⚠️ LEGAL DISCLAIMER</strong><br>
+    This tool is for <strong>educational and research purposes only</strong>. 
+    Option prices and Greeks are theoretical estimates based on the Black-Scholes model. 
+    They do not guarantee future market performance. <strong>Trade at your own risk.</strong>
+</div>
+""", unsafe_allow_html=True)
+
 # === MAIN UI ===
 st.title("Quant-3D: Option Matrix")
 
